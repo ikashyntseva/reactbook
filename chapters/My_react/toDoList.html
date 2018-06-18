@@ -82,6 +82,7 @@
             var createBtn;
             var taskNodes = [];
             var tasks = this.state.tasksList;
+            var isDisabled = this._isDisabled();
 
             if (tasks.length > 0) {
                 tasks.map(function (task, idx) {
@@ -92,7 +93,7 @@
             createBtn = React.DOM.input({
                 type: 'button',
                 value: 'Create new task',
-                disabled: this._isDisabled(),
+                disabled: isDisabled,
                 onClick: this._createTask
             });
 

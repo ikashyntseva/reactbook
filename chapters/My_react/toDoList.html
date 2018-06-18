@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>hello React</title>
+    <title>To Do List</title>
     <meta charset="utf-8">
     <style>
         .toDoList {
@@ -29,23 +29,80 @@
 <script src="../react/build/react.js"></script>
 <script src="../react/build/react-dom.js"></script>
 <script>
-    var tasks = ['Laundry', 'Cleaning the room', 'Grocery'];
+    var PageTitle = React.createClass({
+        displayName: 'PageTitle',
+        render: function () {
+            return React.DOM.h1(
+                {id: 'toDoList_title'},
+                document.querySelector('title').textContent
+            )
+        }
+    });
+
     var ToDoList = React.createClass({
         displayName: 'ToDoList',
-        render: function() {
+        render: function () {
             return React.DOM.div(
-                null,
-                React.DOM.h1(
-                    {id: 'toDoList_title'},
-                    'ToDo List'
-                ),
-                React.DOM.ul(
-                    {className: 'toDoList'},
-                    this.props.tasks.map(function(task, idx) {
-                        return React.createElement(ToDoListTask, {task: task, key: idx});
-                    })
-                )
+                {id: 'toDoList'},
+                React.createElement(PageTitle),
+                React.createElement(ToDoListCreateBlock)
             );
+        }
+    });
+
+    var ToDoListCreateBlock = React.createClass({
+        displayName: 'ToDoListInputField',
+        getDefaultProps: function () {
+            return {
+                taskName: '',
+                tasksList: []
+            }
+        },
+        getInitialState: function () {
+            return {
+                taskName: this.props.taskName,
+                tasksList: this.props.tasksList
+            }
+        },
+        _textChange: function (ev) {
+            this.setState({
+                taskName: ev.target.value
+            })
+        },
+        _createTask: function () {
+            this.props.tasksList.push(this.state.taskName);
+            this.setState({
+                tasksList: this.props.tasksList
+            })
+        },
+        _isDisabled: function () {
+            return !this.state.taskName.length;
+        },
+        render: function () {
+            var createBtn;
+            var taskNodes = [];
+            var tasks = this.state.tasksList;
+
+            if (tasks.length > 0) {
+                tasks.map(function (task, idx) {
+                    taskNodes.push(React.createElement(ToDoListTask, {task: task, key: idx}))
+                });
+            }
+
+            createBtn = React.DOM.input({
+                type: 'button',
+                value: 'Create new task',
+                disabled: this._isDisabled(),
+                onClick: this._createTask
+            });
+
+            return React.DOM.div(
+                {className: 'toDoList_wrapper'},
+                React.DOM.input({type: 'text', taskName: this.state.taskName, onChange: this._textChange}),
+                createBtn,
+                React.DOM.ul({className: 'toDoList'}, taskNodes)
+
+            )
         }
     });
 
@@ -91,12 +148,8 @@
         }
     });
 
-
-
     ReactDOM.render(
-        React.createElement(ToDoList, {
-            tasks: tasks
-        }),
+        React.createElement(ToDoList),
         document.getElementById("app")
     );
 

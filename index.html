@@ -5,10 +5,44 @@
     <title>Title</title>
 </head>
 <body>
-    <ul>
-        <li>
-            <a href="./chapters/My_react/toDoList.html">ToDo List</a>
-        </li>
-    </ul>
+<div id="app">
+    <!-- my app renders here -->
+</div>
+    <script src="chapters/react/build/react.js"></script>
+    <script src="chapters/react/build/react-dom.js"></script>
+    <script>
+        var links =[{url: './chapters/My_react/toDoList.html', 'title': 'ToDo List'}];
+        var ProjectList = React.createClass({
+            displayName: 'ProjectList',
+            render: function () {
+                return React.DOM.ul(
+                    null,
+                    this.props.links.map(function (link, idx) {
+                        return React.createElement(Project, {link: link, key: idx});
+                    })
+                )
+            }
+        });
+
+        var Project = React.createClass({
+            displayName: 'Project',
+            render: function () {
+                return React.DOM.li(
+                    {className: 'project'},
+                    React.DOM.a(
+                        {href: this.props.link.url, className: 'project_link', target: '_self'},
+                        this.props.link.title
+                    )
+                )
+            }
+        });
+
+        ReactDOM.render(
+            React.createElement(ProjectList, {
+                links: links
+            }),
+            document.getElementById("app")
+        );
+    </script>
 </body>
 </html>

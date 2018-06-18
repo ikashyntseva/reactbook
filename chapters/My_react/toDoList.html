@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>hello React</title>
+    <meta charset="utf-8">
+    <style>
+        .toDoList {
+            padding: 0;
+        }
+        .toDoList_task {
+            list-style-type: none;
+            display: flex;
+            align-items: center;
+        }
+        .toDoList_check {
+            display: block;
+            margin: 0 5px 0 0;
+            cursor: pointer;
+        }
+        .toDoList_label {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <!-- my app renders here -->
+</div>
+<script src="../react/build/react.js"></script>
+<script src="../react/build/react-dom.js"></script>
+<script>
+    var tasks = ['Laundry', 'Cleaning the room', 'Grocery'];
+    var ToDoList = React.createClass({
+        displayName: 'ToDoList',
+        render: function() {
+            return React.DOM.div(
+                null,
+                React.DOM.h1(
+                    {id: 'toDoList_title'},
+                    'My ToDo List'
+                ),
+                React.DOM.ul(
+                    {className: 'toDoList'},
+                    this.props.tasks.map(function(task, idx) {
+                        return React.createElement(ToDoListTask, {task: task, key: idx});
+                    })
+                )
+            );
+        }
+    });
+
+    var ToDoListTask = React.createClass({
+        displayName: 'ToDoListTask',
+        getDefaultProps: function () {
+            return {
+                'data-isSelected': false
+            }
+        },
+        getInitialState: function () {
+            return {
+                'data-isSelected': this.props['data-isSelected']
+            }
+        },
+        _taskCheck: function (ev) {
+            this.setState({
+                'data-isSelected': ev.target.checked
+            })
+        },
+        render: function () {
+            if (this.state['data-isSelected']) {
+                return false;
+            } else {
+                return React.DOM.li(
+                    {'data-isSelected': this.state['data-isSelected'], onChange: this._taskCheck, className: 'toDoList_task'},
+                    React.createElement(ToDoListInput, {task: this.props.task}),
+                    React.DOM.label(
+                        {className: 'toDoList_label', htmlFor: this.props.task.replace(/\s/g, '_')},
+                        this.props.task
+                    )
+                )
+            }
+        }
+    });
+
+    var ToDoListInput = React.createClass({
+        displayName: 'ToDoListInput',
+        getDefaultProps: function () {
+            return {
+                checked: false
+            }
+        },
+        getInitialState: function () {
+            return {
+                checked: this.props.checked
+            }
+        },
+        _taskCheck: function (ev) {
+            this.setState({
+                checked: ev.currentTarget.checked
+            })
+        },
+        render:      function () {
+            return React.DOM.input(
+                {checked: this.state.checked, onChange: this._taskCheck, id: this.props.task.replace(/\s/g, '_'), className: 'toDoList_check', type: 'checkbox'}
+            );
+        }
+    });
+
+    ReactDOM.render(
+        React.createElement(ToDoList, {
+            tasks: tasks
+        }),
+        document.getElementById("app")
+    );
+
+</script>
+</body>
+</html>

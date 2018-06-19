@@ -20,6 +20,9 @@
             margin: 0 5px 0 0;
             cursor: pointer;
         }
+        .toDoList_check:checked + .toDoList_label {
+            text-decoration: line-through;
+        }
         .toDoList_label {
             cursor: pointer;
         }
@@ -118,31 +121,10 @@
     });
 
     var ToDoListTask = React.createClass({
-        displayName: 'ToDoListTask',       
-        render: function () {
-            return React.DOM.li(
-                {
-                    //isSelected: this.state.isSelected,
-                    onChange: this._taskCheck,
-                    className: 'toDoList_task'
-                },
-                React.createElement(ToDoListCheckBox, {task: this.props.task}),
-                React.DOM.label(
-                    {
-                        className: 'toDoList_label',
-                        htmlFor: this.props.task.replace(/\s/g, '_')
-                    },
-                    this.props.task
-                )
-            )
-        }
-    });
-
-    var ToDoListCheckBox = React.createClass({
-        displayName: 'ToDoListCheckBox',
-         getDefaultProps: function () {
+        displayName: 'ToDoListTask',
+        getDefaultProps: function () {
             return {
-               className: 'toDoList_check'
+               className: 'toDoList_task'
             }
         },
         getInitialState: function () {
@@ -161,9 +143,29 @@
                 className: newClassName
             })
         },
+        render: function () {
+            return React.DOM.li(
+                {
+                    onChange: this._taskCheck,
+                    className: this.state.className
+                },
+                React.createElement(ToDoListCheckBox, {task: this.props.task}),
+                React.DOM.label(
+                    {
+                        className: 'toDoList_label',
+                        htmlFor: this.props.task.replace(/\s/g, '_')
+                    },
+                    this.props.task
+                )
+            )
+        }
+    });
+
+    var ToDoListCheckBox = React.createClass({
+        displayName: 'ToDoListCheckBox',
         render:      function () {
             return React.DOM.input(
-                {id: this.props.task.replace(/\s/g, '_'), className: this.state.className, type: 'checkbox', onChange: this._taskCheck}
+                {id: this.props.task.replace(/\s/g, '_'), className: 'toDoList_check', type: 'checkbox'}
             );
         }
     });

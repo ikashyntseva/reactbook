@@ -176,7 +176,7 @@
         },
         render:      function () {
             return React.DOM.input(
-                {id: this.props.task.replace(/\s/g, '_'), className: 'toDoList_check', type: 'checkbox', checked: this.state.checked}
+                {id: this.props.task.replace(/\s/g, '_'), className: 'toDoList_check', type: 'checkbox', checked: this.state.checked, onChange: this._taskCheck}
             );
         }
     });

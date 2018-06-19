@@ -144,7 +144,7 @@
                         onChange: this._taskCheck,
                         className: 'toDoList_task'
                     },
-                    React.createElement(ToDoListCheckBox, {task: this.props.task, checked: true}),
+                    React.createElement(ToDoListCheckBox, {task: this.props.task, checked: this.state.isSelected}),
                     React.DOM.label(
                         {
                             className: 'toDoList_label',
@@ -159,9 +159,19 @@
 
     var ToDoListCheckBox = React.createClass({
         displayName: 'ToDoListCheckBox',
+         getDefaultProps: function () {
+            return {
+               checked: false
+            }
+        },
+        getInitialState: function () {
+            return {
+                checked: this.props.checked
+            }
+        },
         render:      function () {
             return React.DOM.input(
-                {id: this.props.task.replace(/\s/g, '_'), className: 'toDoList_check', type: 'checkbox'}
+                {id: this.props.task.replace(/\s/g, '_'), className: 'toDoList_check', type: 'checkbox', checked: this.state.checked}
             );
         }
     });

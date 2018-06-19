@@ -140,11 +140,11 @@
             } else {*/
                 return React.DOM.li(
                     {
-                        isSelected: this.state.isSelected,
+                        //isSelected: this.state.isSelected,
                         onChange: this._taskCheck,
                         className: 'toDoList_task'
                     },
-                    React.createElement(ToDoListCheckBox, {task: this.props.task, checked: this.state.isSelected}),
+                    React.createElement(ToDoListCheckBox, {task: this.props.task}),
                     React.DOM.label(
                         {
                             className: 'toDoList_label',
@@ -168,6 +168,11 @@
             return {
                 checked: this.props.checked
             }
+        },
+        _taskCheck: function (ev) {
+            this.setState({
+                checked: ev.target.checked
+            })
         },
         render:      function () {
             return React.DOM.input(

@@ -121,26 +121,26 @@
         displayName: 'ToDoListTask',
         getDefaultProps: function () {
             return {
-                'data-isSelected': false
+                isSelected: false
             }
         },
         getInitialState: function () {
             return {
-                'data-isSelected': this.props['data-isSelected']
+                isSelected: this.props.isSelected
             }
         },
         _taskCheck: function (ev) {
             this.setState({
-                'data-isSelected': ev.target.checked
+                isSelected: ev.target.checked
             })
         },
         render: function () {
-            if (this.state['data-isSelected']) {
+            if (this.state.isSelected) {
                 return false;
             } else {
                 return React.DOM.li(
                     {
-                        'data-isSelected': this.state['data-isSelected'],
+                        isSelected: this.state.isSelected,
                         onChange: this._taskCheck,
                         className: 'toDoList_task'
                     },
@@ -170,7 +170,6 @@
         React.createElement(ToDoList),
         document.getElementById("app")
     );
-
 </script>
 </body>
 </html>

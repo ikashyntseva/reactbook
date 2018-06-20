@@ -100,7 +100,7 @@
                     taskNodes.push(React.createElement(ToDoListTask, {task: task, key: idx, index: idx}))
                 });
 
-                filter = React.createElement(ToDoListFilter, null);
+                filter = React.createElement(ToDoListFilter, {tasks: taskNodes});
             }
 
             createBtn = React.DOM.input({

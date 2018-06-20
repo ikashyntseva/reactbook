@@ -32,8 +32,8 @@
 <div id="app">
     <!-- my app renders here -->
 </div>
-<script src="../react/build/react.js"></script>
-<script src="../react/build/react-dom.js"></script>
+<script src="../chapters/react/build/react.js"></script>
+<script src="../chapters/react/build/react-dom.js"></script>
 <script>
     var PageTitle = React.createClass({
         displayName: 'PageTitle',
@@ -149,11 +149,11 @@
                     onChange: this._taskCheck,
                     className: this.state.className
                 },
-                React.createElement(ToDoListCheckBox, {task: this.props.task}),
+                React.createElement(ToDoListCheckBox, {task: this.props.key}),
                 React.DOM.label(
                     {
                         className: 'toDoList_label',
-                        htmlFor: this.props.task.replace(/\s/g, '_')
+                        htmlFor: this.props.key
                     },
                     this.props.task
                 )
@@ -165,7 +165,7 @@
         displayName: 'ToDoListCheckBox',
         render:      function () {
             return React.DOM.input(
-                {id: this.props.task.replace(/\s/g, '_'), className: 'toDoList_check', type: 'checkbox'}
+                {id: this.props.key, className: 'toDoList_check', type: 'checkbox'}
             );
         }
     });

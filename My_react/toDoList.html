@@ -56,12 +56,12 @@
         }
     });
 
-    /*var ToDoListFilter = React.createClass({
+    var ToDoListFilter = React.createClass({
         displayName: 'ToDoListFilter',
         render: function () {
             return React.DOM.div(null, 'Filter');
         }
-    });*/
+    });
 
     var ToDoListCreateBlock = React.createClass({
         displayName: 'ToDoListCreateBlock',
@@ -90,7 +90,7 @@
         },
         render: function () {
             var createBtn;
-            //var filter;
+            var filter;
             var taskNodes = [];
             var tasks = this.state.tasksList;
             var isDisabled = this._isDisabled();
@@ -100,7 +100,7 @@
                     taskNodes.push(React.createElement(ToDoListTask, {task: task, key: idx, index: idx}))
                 });
 
-                //filter = React.createElement(ToDoListFilter, null);
+                filter = React.createElement(ToDoListFilter, null);
             }
 
             createBtn = React.DOM.input({
@@ -123,7 +123,7 @@
                     {className: 'toDoList'},
                     taskNodes
                 ),
-                //filter
+                filter
             )
         }
     });

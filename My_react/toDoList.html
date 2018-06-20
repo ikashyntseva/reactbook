@@ -92,7 +92,7 @@
 
             if (tasks.length > 0) {
                 tasks.map(function (task, idx) {
-                    taskNodes.push(React.createElement(ToDoListTask, {task: task, key: idx}))
+                    taskNodes.push(React.createElement(ToDoListTask, {task: task, key: idx, index: idx}))
                 });
             }
 
@@ -149,11 +149,11 @@
                     onChange: this._taskCheck,
                     className: this.state.className
                 },
-                React.createElement(ToDoListCheckBox, {task: this.props.key}),
+                React.createElement(ToDoListCheckBox, {index: this.props.index}),
                 React.DOM.label(
                     {
                         className: 'toDoList_label',
-                        htmlFor: this.props.key
+                        htmlFor: this.props.index
                     },
                     this.props.task
                 )

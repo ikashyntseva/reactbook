@@ -56,18 +56,19 @@
         }
     });
 
+    /*var ToDoListFilter = React.createClass({
+        displayName: 'ToDoListFilter',
+        render: function () {
+            return React.DOM.div(null, 'Filter');
+        }
+    });*/
+
     var ToDoListCreateBlock = React.createClass({
         displayName: 'ToDoListCreateBlock',
-        getDefaultProps: function () {
+        getInitialState: function () {
             return {
                 taskName: '',
                 tasksList: []
-            }
-        },
-        getInitialState: function () {
-            return {
-                taskName: this.props.taskName,
-                tasksList: this.props.tasksList
             }
         },
         _textChange: function (ev) {
@@ -76,11 +77,12 @@
             })
         },
         _createTask: function () {
-            var newTasksList = [];
+            var newTasksList = this.state.tasksList.slice();
             newTasksList.push(this.state.taskName);
 
             this.setState({
-                tasksList: newTasksList
+                tasksList: newTasksList,
+                taskName: ''
             })
         },
         _isDisabled: function () {
@@ -88,6 +90,7 @@
         },
         render: function () {
             var createBtn;
+            //var filter;
             var taskNodes = [];
             var tasks = this.state.tasksList;
             var isDisabled = this._isDisabled();
@@ -96,6 +99,8 @@
                 tasks.map(function (task, idx) {
                     taskNodes.push(React.createElement(ToDoListTask, {task: task, key: idx, index: idx}))
                 });
+
+                //filter = React.createElement(ToDoListFilter, null);
             }
 
             createBtn = React.DOM.input({
@@ -110,14 +115,15 @@
                 {className: 'toDoList_wrapper'},
                 React.DOM.input({
                     type: 'text',
-                    taskName: this.state.taskName,
+                    value: this.state.taskName,
                     onChange: this._textChange
                 }),
                 createBtn,
                 React.DOM.ul(
                     {className: 'toDoList'},
                     taskNodes
-                )
+                ),
+                //filter
             )
         }
     });

@@ -20,6 +20,9 @@
             margin: 0 5px 0 0;
             cursor: pointer;
         }
+        .toDoList_check:checked + .toDoList_label {
+            text-decoration: line-through;
+        }
         .toDoList_label {
             cursor: pointer;
         }
@@ -30,8 +33,8 @@
 <div id="app">
     <!-- my app renders here -->
 </div>
-<script src="../react/build/react.js"></script>
-<script src="../react/build/react-dom.js"></script>
+<script src="../chapters/react/build/react.js"></script>
+<script src="../chapters/react/build/react-dom.js"></script>
 <script>
     var ToDoList = React.createClass({
         displayName: 'ToDoList',
@@ -43,18 +46,19 @@
         }
     });
 
+    var ToDoListFilter = React.createClass({
+        displayName: 'ToDoListFilter',
+        render: function () {
+            return React.DOM.div(null, 'Filter');
+        }
+    });
+
     var ToDoListCreateBlock = React.createClass({
-        displayName: 'ToDoListCheckBoxField',
-        getDefaultProps: function () {
+        displayName: 'ToDoListCreateBlock',
+        getInitialState: function () {
             return {
                 taskName: '',
                 tasksList: []
-            }
-        },
-        getInitialState: function () {
-            return {
-                taskName: this.props.taskName,
-                tasksList: this.props.tasksList
             }
         },
         _textChange: function (ev) {
@@ -63,9 +67,12 @@
             })
         },
         _createTask: function () {
-            this.props.tasksList.push(this.state.taskName);
+            var newTasksList = this.state.tasksList.slice();
+            newTasksList.push(this.state.taskName);
+
             this.setState({
-                tasksList: this.props.tasksList
+                tasksList: newTasksList,
+                taskName: ''
             })
         },
         _isDisabled: function () {
@@ -73,14 +80,17 @@
         },
         render: function () {
             var createBtn;
+            var filter;
             var taskNodes = [];
             var tasks = this.state.tasksList;
             var isDisabled = this._isDisabled();
 
             if (tasks.length > 0) {
                 tasks.map(function (task, idx) {
-                    taskNodes.push(React.createElement(ToDoListTask, {task: task, key: idx}))
+                    taskNodes.push(React.createElement(ToDoListTask, {task: task, key: idx, index: idx}))
                 });
+
+                filter = React.createElement(ToDoListFilter, {tasks: taskNodes});
             }
 
             createBtn = React.DOM.input({
@@ -95,14 +105,15 @@
                 {className: 'toDoList_wrapper'},
                 React.DOM.input({
                     type: 'text',
-                    taskName: this.state.taskName,
+                    value: this.state.taskName,
                     onChange: this._textChange
                 }),
                 createBtn,
                 React.DOM.ul(
                     {className: 'toDoList'},
                     taskNodes
-                )
+                ),
+                filter
             )
         }
     });
@@ -111,39 +122,40 @@
         displayName: 'ToDoListTask',
         getDefaultProps: function () {
             return {
-                'data-isSelected': false
+               className: 'toDoList_task'
             }
         },
         getInitialState: function () {
             return {
-                'data-isSelected': this.props['data-isSelected']
+                className: this.props.className
             }
         },
         _taskCheck: function (ev) {
+            var isChecked = ev.target.checked;
+            var newClassName = this.props.className;
+            
+            if (isChecked) {
+                newClassName += ' ' + 'is-Selected';
+            }
             this.setState({
-                'data-isSelected': ev.target.checked
+                className: newClassName
             })
         },
         render: function () {
-            if (this.state['data-isSelected']) {
-                return false;
-            } else {
-                return React.DOM.li(
+            return React.DOM.li(
+                {
+                    onChange: this._taskCheck,
+                    className: this.state.className
+                },
+                React.createElement(ToDoListCheckBox, {index: this.props.index}),
+                React.DOM.label(
                     {
-                        'data-isSelected': this.state['data-isSelected'],
-                        onChange: this._taskCheck,
-                        className: 'toDoList_task'
+                        className: 'toDoList_label',
+                        htmlFor: this.props.index
                     },
-                    React.createElement(ToDoListCheckBox, {task: this.props.task}),
-                    React.DOM.label(
-                        {
-                            className: 'toDoList_label',
-                            htmlFor: this.props.task.replace(/\s/g, '_')
-                        },
-                        this.props.task
-                    )
+                    this.props.task
                 )
-            }
+            )
         }
     });
 
@@ -151,7 +163,7 @@
         displayName: 'ToDoListCheckBox',
         render:      function () {
             return React.DOM.input(
-                {id: this.props.task.replace(/\s/g, '_'), className: 'toDoList_check', type: 'checkbox'}
+                {id: this.props.index, className: 'toDoList_check', type: 'checkbox'}
             );
         }
     });
@@ -160,7 +172,6 @@
         React.createElement(ToDoList),
         document.getElementById("app")
     );
-
 </script>
 </body>
 </html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>To Do List JSX</title>
+    <style>
+        .toDoList {
+            padding: 0;
+        }
+        .toDoList_createBtn:not([disabled]) {
+            cursor: pointer;
+        }
+        .toDoList_task {
+            list-style-type: none;
+            display: flex;
+            align-items: center;
+        }
+        .toDoList_check {
+            display: block;
+            margin: 0 5px 0 0;
+            cursor: pointer;
+        }
+        .toDoList_check:checked + .toDoList_label {
+            text-decoration: line-through;
+        }
+        .toDoList_label {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>To Do List</h1>
+    <div id="app">
+        <!-- my app renders here -->
+    </div>
+    <script src="https://fb.me/react-with-addons-0.14.3.js"></script>
+    <script src="https://fb.me/react-dom-0.14.3.js"></script>
+    <script src="js/browser.min.js"></script>
+    <script type='text/babel'>
+        {/* ToDoList */}
+        var ToDoList = React.createClass({
+            getInitialState: function () {
+                return {
+                    tasksList: []
+                }
+            },
+            _storeTasks: function (newTask) {
+                var newTasksList = this.state.tasksList.slice();
+
+                newTasksList.push(newTask);
+
+                this.setState({
+                    tasksList: newTasksList
+                });
+            },
+            render: function () {
+                return (
+                    <div id='toDoList'>
+                        <CreateBlock storeTasks={this._storeTasks} />
+                        <List tasks={this.state.tasksList} />
+                    </div>
+                );
+            }
+        });
+        {/* Create Block */}
+        var CreateBlock = React.createClass({
+            getInitialState: function () {
+                return {
+                    task: ''
+                }
+            },
+            _updateValue: function (ev) {
+                this.setState({
+                    task: ev.target.value
+                })
+            },
+            _createTask: function () {
+                this.props.storeTasks(this.state.task);
+                this.setState({
+                    task: ''
+                })
+            },
+            render: function () {
+                var isDisabled = !this.state.task.length;
+
+                return (
+                    <div>
+                        {/*<input id='inputField' type='text' value={this.state.task} onChange={this._updateValue} />*/}
+                        <InputField updateValue={this._updateValue} task={this.state.task} />
+                        <input type='button' value='Create Task' onClick={this._createTask} disabled={isDisabled} />
+                    </div>
+                );
+            }
+        });
+
+        var InputField = React.createClass({
+            getDefaultProps: function () {
+            },
+            componentDidMount: function () {
+
+            },
+            render: function () {
+                return (
+                        <input id='inputField'  type='text' value={this.props.task} onChange={this.props.updateValue} />
+                )
+            }
+        });
+
+        {/* List */}
+        var List = React.createClass({
+            render: function () {
+                var tasks = this.props.tasks;
+                var taskTemplate = tasks.map(function(task, index) {
+                    return (
+                        <Task key={index} taskName={task} />
+                    )
+                });
+                return (
+                    <ul>
+                        {taskTemplate}
+                    </ul>
+                );
+            }
+        });
+        {/* Task */}
+        var Task = React.createClass({
+           render: function () {
+               var taskName = this.props.taskName;
+               return (
+                   <li>
+                       <input type='checkbox' />
+                       <label>{taskName}</label>
+                   </li>
+               );
+           }
+        });
+        /* Filter */
+
+        ReactDOM.render(
+            <ToDoList />,
+            document.getElementById('app')
+        );
+    </script>
+</body>
+</html>

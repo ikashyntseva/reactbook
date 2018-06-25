@@ -36,28 +36,18 @@
     </style>
 </head>
 <body>
+<h1>To Do List</h1>
 <div id="app">
     <!-- my app renders here -->
 </div>
 <script src="../chapters/react/build/react.js"></script>
 <script src="../chapters/react/build/react-dom.js"></script>
 <script>
-    var PageTitle = React.createClass({
-        displayName: 'PageTitle',
-        render: function () {
-            return React.DOM.h1(
-                {id: 'toDoList_title'},
-                document.querySelector('title').textContent
-            )
-        }
-    });
-
     var ToDoList = React.createClass({
         displayName: 'ToDoList',
         render: function () {
             return React.DOM.div(
                 {id: 'toDoList'},
-                React.createElement(PageTitle),
                 React.createElement(ToDoListCreateBlock)
             );
         }

@@ -7,6 +7,13 @@
         .toDoList {
             padding: 0;
         }
+
+        .toDoList.show_completed li:not(.is-Selected) {
+            display: none;
+        }
+        .toDoList.show_uncompleted li.is-Selected {
+            display: none;
+        }
         .toDoList_createBtn:not([disabled]) {
             cursor: pointer;
         }
@@ -58,8 +65,43 @@
 
     var ToDoListFilter = React.createClass({
         displayName: 'ToDoListFilter',
+        getInitialState: function () {
+            return {
+                all: 'all',
+                completed: 'completed',
+                uncompleted: 'uncompleted'
+            }
+        },
+        _showAll: function () {
+            this.props.filterList('all')
+        },
+        _showCompleted: function () {
+            this.props.filterList('completed')
+        },
+        _showUncompleted: function () {
+            this.props.filterList('uncompleted')
+        },
         render: function () {
-            return React.DOM.div(null, 'Filter');
+            return React.DOM.div(null,
+                React.DOM.input({
+                    type: 'button',
+                    value: 'Show All',
+                    className:'toDoList_filter_btn',
+                    onClick: this._showAll
+                }),
+                React.DOM.input({
+                    type: 'button',
+                    value: 'Show Completed',
+                    className:'toDoList_filter_btn',
+                    onClick: this._showCompleted
+                }),
+                React.DOM.input({
+                    type: 'button',
+                    value: 'Show Uncompleted',
+                    className:'toDoList_filter_btn',
+                    onClick: this._showUncompleted
+                })
+            );
         }
     });
 
@@ -68,7 +110,8 @@
         getInitialState: function () {
             return {
                 taskName: '',
-                tasksList: []
+                tasksList: [],
+                filterType: 'all'
             }
         },
         _textChange: function (ev) {
@@ -88,19 +131,26 @@
         _isDisabled: function () {
             return !this.state.taskName.length;
         },
+        _filterList: function (filterType) {
+            this.setState({
+                filterType: filterType
+            });
+        },
         render: function () {
             var createBtn;
             var filter;
             var taskNodes = [];
             var tasks = this.state.tasksList;
             var isDisabled = this._isDisabled();
+            var filterType = this.state.filterType;
+            var listClassName = 'toDoList ' + 'show_' + filterType;
 
             if (tasks.length > 0) {
                 tasks.map(function (task, idx) {
                     taskNodes.push(React.createElement(ToDoListTask, {task: task, key: idx, index: idx}))
                 });
 
-                filter = React.createElement(ToDoListFilter, {tasks: taskNodes});
+                filter = React.createElement(ToDoListFilter, {filterList: this._filterList});
             }
 
             createBtn = React.DOM.input({
@@ -119,13 +169,18 @@
                     onChange: this._textChange
                 }),
                 createBtn,
-                React.DOM.ul(
-                    {className: 'toDoList'},
-                    taskNodes
-                ),
+                React.createElement(ToDoListBlock, {className: listClassName, tasks: taskNodes}),
                 filter
             )
         }
+    });
+
+    var ToDoListBlock = React.createClass({
+        displayName: 'ToDoListBlock',
+        render: function () {
+            return React.DOM.ul({className: this.props.className}, this.props.tasks)
+        }
+
     });
 
     var ToDoListTask = React.createClass({
@@ -147,6 +202,7 @@
             if (isChecked) {
                 newClassName += ' ' + 'is-Selected';
             }
+
             this.setState({
                 className: newClassName
             })

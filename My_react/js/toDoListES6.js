@@ -55,7 +55,7 @@ class ToDoList extends React.Component {
     }
 
     render() {
-        let filters = <span>You don't  have any tasks now!</span>;
+        let filters = <span>You dont  have any tasks now!</span>;
         let tasks = this.state.tasksList.slice();
 
         tasks = tasks.filter((task) => {
@@ -186,5 +186,5 @@ class Task extends React.Component {
 
 ReactDOM.render(
     <ToDoList/>,
-    document.getElementById('app'),
+    document.getElementById('app')
 );

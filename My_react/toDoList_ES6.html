@@ -2,9 +2,53 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>$Title$</title>
+    <title>Todo List on ES6</title>
+    <style>
+        .toDoList {
+            padding: 0;
+        }
+        .toDoList_createBtn:not([disabled]) {
+            cursor: pointer;
+        }
+        .toDoList_task {
+            list-style-type: none;
+            display: flex;
+            align-items: center;
+        }
+        .toDoList_check {
+            margin: 0 5px 0 0;
+            cursor: pointer;
+        }
+        .toDoList_task.is-selected {
+            text-decoration: line-through;
+        }
+        .toDoList_task label {
+            cursor: pointer;
+        }
+        .filters {
+            list-style: none;
+            padding: 0;
+        }
+        .filters li {
+            display: inline-block;
+        }
+        .filters li a {
+            display: block;
+            margin: 0 4px;
+            color: blue;
+            cursor: pointer;
+        }
+        .filters li a:hover,
+        .filters li a.active {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-$END$
+    <div id="app"></div>
+    <script src="https://fb.me/react-with-addons-0.14.3.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/16.4.0/umd/react.development.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.4.0/umd/react-dom.development.js"></script>
+    <script type='text/babel' src="js/toDoListES6.js"></script>
 </body>
 </html>
